@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-echart-maker-plugin</title>
+</head>
+<body>
+  <div id="app">
+    <div class="chart-card">
+      <chart-maker id="chart" height="350px" width="100%" :option.sync="chartOption"></chart-maker>
+    </div>
+  </div>
+  <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+  <script src="../dist/js/vue-echart-maker-plugin.min.js"></script>
+  <script type="module">
+    var main = {
+      data() {
+        return {
+          option: {
+            backgroundColor: '#fff',
+            title: {
+              textStyle: {
+                fontSize: 14,
+                color: '#808080',
+                fontFamily: 'MicrosoftYaHei-Bold',
+              },
+            },
+            tooltip: {
+              trigger: 'item',
+            },
+            grid: {
+            },
+            xAxis: [],
+            yAxis: [],
+            series: [],
+          },
+          chartOption: {},
+        };
+      },
+      methods: {
+        getChartOption() {
+          const tmpOption = {};
+          tmpOption.title = {
+            text: '访问量',
+            left: '5',
+            top: '10',
+          };
+          tmpOption.tooltip = {
+            axisPointer: {
+              lineStyle: {
+                color: '#57617B',
+              },
+            },
+            position(point, params, dom, rect, size) {
+              if (point[0] < 30) {
+                return [0, '50%'];
+              } else if (point[0] > (size.viewSize[0] - 80)) {
+                return [size.viewSize[0] - 80, '50%'];
+              }
+              return [point[0] - 30, '50%'];
+            },
+            formatter: '{b}月: {c}',
+          };
+          tmpOption.grid = {
+            top: 55,
+            left: '-8%',
+            right: '5%',
+            bottom: '2%',
+            containLabel: true,
+          };
+          tmpOption.xAxis = [{
+            show: false,
+            type: 'category',
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#475669',
+              },
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: ['#E3E9EF'],
+              },
+            },
+            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+          }];
+          tmpOption.yAxis = [{
+            show: false,
+            type: 'value',
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#475669',
+              },
+            },
+            axisLabel: {
+              margin: 10,
+              textStyle: {
+                fontSize: 14,
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: ['#E3E9EF'],
+              },
+            },
+          }];
+          tmpOption.series = [{
+            name: '日访问量',
+            type: 'line',
+            smooth: true,
+            // symbol: 'circle',
+            symbolSize: 6,
+            showSymbol: true,
+            lineStyle: {
+              normal: {
+                width: 2,
+              },
+            },
+            itemStyle: {
+              normal: {
+                color: '#0086E6',
+                borderColor: '#0086E6',
+                borderWidth: 2,
+              },
+            },
+            data: [220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122],
+          }];
+          this.chartOption = Object.assign({}, this.option, tmpOption);
+        },
+      },
+      mounted() {
+        this.getChartOption();
+      },
+    };
+    var ChartMaker = Vue.extend(main);
+    new ChartMaker().$mount('#app');
+  </script>
+</body>
+</html>
